@@ -1,0 +1,33 @@
+#!/usr/bin/python
+print "local b=\"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\" \n";
+print " \n";
+print " \n";
+print "function Encrypt(data) \n";
+print "    return ((data:gsub('.', function(x) \n";
+print "        local r,b='',x:byte() \n";
+print "        for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end \n";
+print "        return r; \n";
+print "    end)..'0000'):gsub('%d%d%d?%d?%dd?%d?', function(x) \n";
+print "        if (#x < 6) then return '' end \n";
+print "        local c=0 \n";
+print "        for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end \n";
+print "        return b:sub(c+1,c+1) \n";
+print "    end)..({ '', '==', '=' })[#data%3+1]) \n";
+print "\n";
+print "end \n";
+print " \n";
+print "function Decrypt(data) \n";
+print "    data = string.gsub(data, '[^'..b..'=]', '') \n";
+print "    return (data:gsub('.', function(x) \n";
+print "        if (x == '=') then return '' end \n";
+print "        local r,f='',(b:find(x)-1) \n";
+print "        for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end
+print "        return r; \n";
+print "    end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x) \n";
+print "        if (#x ~= 8) then return '' end \n";
+print "        local c=0 \n";
+print "        for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or0) end \n";
+print "        return string.char(c) \n";
+print "    end)) \n";
+print "\n";
+print "end\n";
